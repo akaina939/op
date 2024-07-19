@@ -44,7 +44,9 @@
     <div class="text-container">
         <div class="text-area">
             <textarea id="input-text" placeholder="ここにテキストを入力してください... (最大99000文字)" rows="10" cols="50" maxlength="99000"></textarea><br>
-            <button onclick="convertToUnicode()">変換して表示</button>
+            <button onclick="convertToUnicode()">文字列からUnicodeに変換</button><br>
+            <textarea id="unicode-input" placeholder="ここにUnicodeエスケープシーケンスを入力してください..." rows="10" cols="50"></textarea><br>
+            <button onclick="convertToText()">Unicodeから文字列に変換</button>
         </div>
         <div class="result-area">
             <h2>変換結果</h2>
@@ -70,6 +72,16 @@
                     result += '\\u' + hex;
                 }
             }
+
+            var resultElement = document.getElementById('result');
+            resultElement.innerText = result;
+        }
+
+        function convertToText() {
+            var unicodeInput = document.getElementById('unicode-input').value;
+            var result = unicodeInput.replace(/\\u([0-9a-fA-F]{4})/g, function(match, p1) {
+                return String.fromCharCode(parseInt(p1, 16));
+            });
 
             var resultElement = document.getElementById('result');
             resultElement.innerText = result;
