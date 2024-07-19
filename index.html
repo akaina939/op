@@ -23,10 +23,13 @@
     }
     .result-area {
         flex: 1;
-        margin-right: 20px; 
-        
-        width: 100%;
-        height: 200px; /* テキストエリアの高さを調整 */
+    }
+    pre {
+        white-space: pre-wrap; /* 改行を保持 */
+        word-wrap: break-word; /* 長い単語を折り返す */
+        background-color: #f0f0f0;
+        padding: 10px;
+        border: 1px solid #ccc;
     }
 </style>
 </head>
@@ -48,26 +51,21 @@
         function convertToUnicode() {
             var inputText = document.getElementById('input-text').value;
             var result = '';
+            var symbols = "@#%&*+-=[]/():;!?,.~^¥$\"+_\\{}|";
 
             for (var i = 0; i < inputText.length; i++) {
                 var char = inputText.charAt(i);
 
-                // 指定された記号と空白・改行以外の文字をUnicodeに変換する
-                if (!isSymbolOrWhitespace(char)) {
-                    result += '\\u{' + char.codePointAt(0).toString(16) + '}';
-                } else {
+                // 指定された記号、空白、改行はそのまま
+                if (symbols.includes(char) || /\s/.test(char)) {
                     result += char;
+                } else {
+                    result += '\\u{' + char.codePointAt(0).toString(16) + '}';
                 }
             }
 
             var resultElement = document.getElementById('result');
             resultElement.innerText = result;
-        }
-
-        // 指定された記号と空白・改行以外の文字かどうかを判定する関数
-        function isSymbolOrWhitespace(char) {
-            var symbols = "@#%&*+-=[]/():;!?,.~^¥$\"+_\{}|";
-            return symbols.includes(char) || /\s/.test(char); // 空白または改行を含むかどうかを判定
         }
 
         function copyResult() {
