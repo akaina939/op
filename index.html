@@ -16,7 +16,7 @@
 </head>
 <body>
     <h1>文字列のUnicode変換</h1>
-    <textarea id="input-text" placeholder="ここにテキストを入力してください..." rows="10" cols="50"></textarea><br>
+    <textarea id="input-text" placeholder="ここにテキストを入力してください..." rows="10" cols="50">@#%&*+-=[]/():;!?,.~^¥$"+_\{}| そして空白改行は以外は変換して</textarea><br>
     <button onclick="convertToUnicode()">変換してコピー</button><br>
     <div id="result-container">
         <h2>変換結果</h2>
@@ -32,8 +32,8 @@
             for (var i = 0; i < inputText.length; i++) {
                 var char = inputText.charAt(i);
 
-                // ASCIIの範囲外の文字以外をUnicodeに変換する
-                if (char.charCodeAt(0) > 255) {
+                // 指定された記号と空白・改行以外の文字をUnicodeに変換する
+                if (!isSymbolOrWhitespace(char)) {
                     result += '\\u{' + char.codePointAt(0).toString(16) + '}';
                 } else {
                     result += char;
@@ -42,6 +42,12 @@
 
             var resultElement = document.getElementById('result');
             resultElement.innerText = result;
+        }
+
+        // 指定された記号と空白・改行以外の文字かどうかを判定する関数
+        function isSymbolOrWhitespace(char) {
+            var symbols = "@#%&*+-=[]/():;!?,.~^¥$\"+_\{}|";
+            return symbols.includes(char) || /\s/.test(char); // 空白または改行を含むかどうかを判定
         }
 
         function copyResult() {
