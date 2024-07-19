@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記号以外の文字をUnicodeに変換する</title>
+</head>
+<body>
+    <h1>記号以外の文字をUnicodeに変換する</h1>
+    <textarea id="input-text" rows="10" cols="50"></textarea><br>
+    <button onclick="convertToUnicode()">変換する</button><br>
+    <div id="result"></div>
+
+    <script>  
+    function convertToUnicode() {
+    // テキストエリアから入力された文字列を取得
+    var inputText = document.getElementById('input-text').value;
+
+    // 正規表現を使用して記号を除外し、文字をUnicodeに変換する
+    var regex = /[^\p{P}\p{S}\s]/gu; // \p{P}は句読点、\p{S}は記号、\sは空白文字
+    var result = '';
+
+    // 文字列を一文字ずつ処理
+    for (var i = 0; i < inputText.length; i++) {
+        var char = inputText.charAt(i);
+
+        // 正規表現で記号以外の文字を抽出
+        if (!char.match(regex)) {
+            // Unicodeエスケープ文字列に変換して結果に追加
+            result += '\\u{' + char.codePointAt(0).toString(16) + '}';
+        }
+    }
+
+    // 結果を表示する
+    document.getElementById('result').innerText = result;
+}
+    </script>
+</body>
+</html>
