@@ -2,58 +2,61 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>PMD to OBJ Converter</title>
+    <title>OBJ Viewer</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
 </head>
 <body>
-    <h1>PMD to OBJ Converter</h1>
     <input type="file" id="fileInput" />
-    <button onclick="convertPMDToOBJ()">Convert</button>
-    <a id="downloadLink" style="display:none">Download OBJ</a>
-
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/examples/js/loaders/OBJLoader.js"></script>
     <script>
-      document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
+        // シーン、カメラ、レンダラーをセットアップ
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const arrayBuffer = e.target.result;
-            const objData = parsePMDAndConvertToOBJ(arrayBuffer);
-            createDownloadLink(objData);
-        };
-        reader.readAsArrayBuffer(file);
-    }
-}
+        // 光源を追加
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(1, 1, 1).normalize();
+        scene.add(light);
 
-function parsePMDAndConvertToOBJ(arrayBuffer) {
-    // PMDファイルの解析 (バイナリデータの読み取り)
-    const dataView = new DataView(arrayBuffer);
-    // 以下、PMDファイルのフォーマットに従ってデータを解析
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
 
-    let objData = '';
+        camera.position.z = 5;
 
-    // サンプルデータの追加 (実際には解析したデータを使用)
-    objData += 'v 0.0 0.0 0.0\n';
-    objData += 'v 1.0 0.0 0.0\n';
-    objData += 'v 1.0 1.0 0.0\n';
-    objData += 'f 1 2 3\n';
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
 
-    // 実際のデータを使用してobjDataを生成
-    // ...
+        animate();
 
-    return objData;
-}
+        // ファイル入力の処理
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
 
-function createDownloadLink(objData) {
-    const blob = new Blob([objData], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.getElementById('downloadLink');
-    link.href = url;
-    link.download = 'model.obj';
-    link.style.display = 'block';
-    link.innerText = 'Download OBJ';
-}
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const contents = e.target.result;
+                    loadOBJFromText(contents);
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function loadOBJFromText(contents) {
+            const loader = new THREE.OBJLoader();
+            const object = loader.parse(contents);
+            scene.add(object);
+        }
     </script>
 </body>
 </html>
