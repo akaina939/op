@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>PMD to OBJ Converter</title>
+</head>
+<body>
+    <h1>PMD to OBJ Converter</h1>
+    <input type="file" id="fileInput" />
+    <button onclick="convertPMDToOBJ()">Convert</button>
+    <a id="downloadLink" style="display:none">Download OBJ</a>
+
+    <script>
+      document.getElementById('fileInput').addEventListener('change', handleFileSelect, false);
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const arrayBuffer = e.target.result;
+            const objData = parsePMDAndConvertToOBJ(arrayBuffer);
+            createDownloadLink(objData);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+}
+
+function parsePMDAndConvertToOBJ(arrayBuffer) {
+    // PMDファイルの解析 (バイナリデータの読み取り)
+    const dataView = new DataView(arrayBuffer);
+    // 以下、PMDファイルのフォーマットに従ってデータを解析
+
+    let objData = '';
+
+    // サンプルデータの追加 (実際には解析したデータを使用)
+    objData += 'v 0.0 0.0 0.0\n';
+    objData += 'v 1.0 0.0 0.0\n';
+    objData += 'v 1.0 1.0 0.0\n';
+    objData += 'f 1 2 3\n';
+
+    // 実際のデータを使用してobjDataを生成
+    // ...
+
+    return objData;
+}
+
+function createDownloadLink(objData) {
+    const blob = new Blob([objData], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.getElementById('downloadLink');
+    link.href = url;
+    link.download = 'model.obj';
+    link.style.display = 'block';
+    link.innerText = 'Download OBJ';
+}
+    </script>
+</body>
+</html>
