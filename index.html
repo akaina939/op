@@ -3,37 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>記号以外の文字をUnicodeに変換する</title>
+<title>文字列のUnicode変換</title>
+<style>
+    textarea {
+        width: 100%;
+        height: 100px;
+    }
+    button {
+        margin-top: 10px;
+    }
+</style>
 </head>
 <body>
-    <h1>記号以外の文字をUnicodeに変換する</h1>
-    <textarea id="input-text" rows="10" cols="50"></textarea><br>
-    <button onclick="convertToUnicode()">変換する</button><br>
-    <div id="result"></div>
+    <h1>文字列のUnicode変換</h1>
+    <textarea id="input-text" placeholder="ここにテキストを入力してください..." rows="10" cols="50"></textarea><br>
+    <button onclick="convertToUnicode()">変換してコピー</button><br>
+    <div id="result-container">
+        <h2>変換結果</h2>
+        <pre id="result"></pre>
+        <button onclick="copyResult()">結果をコピー</button>
+    </div>
 
-    <script>  
-    function convertToUnicode() {
-    // テキストエリアから入力された文字列を取得
-    var inputText = document.getElementById('input-text').value;
+    <script>
+        function convertToUnicode() {
+            var inputText = document.getElementById('input-text').value;
+            var result = '';
 
-    // 正規表現を使用して記号を除外し、文字をUnicodeに変換する
-    var regex = /[^\p{P}\p{S}\s]/gu; // \p{P}は句読点、\p{S}は記号、\sは空白文字
-    var result = '';
+            for (var i = 0; i < inputText.length; i++) {
+                var char = inputText.charAt(i);
 
-    // 文字列を一文字ずつ処理
-    for (var i = 0; i < inputText.length; i++) {
-        var char = inputText.charAt(i);
+                // ASCIIの範囲外の文字以外をUnicodeに変換する
+                if (char.charCodeAt(0) > 255) {
+                    result += '\\u{' + char.codePointAt(0).toString(16) + '}';
+                } else {
+                    result += char;
+                }
+            }
 
-        // 正規表現で記号以外の文字を抽出
-        if (!char.match(regex)) {
-            // Unicodeエスケープ文字列に変換して結果に追加
-            result += '\\u{' + char.codePointAt(0).toString(16) + '}';
+            var resultElement = document.getElementById('result');
+            resultElement.innerText = result;
         }
-    }
 
-    // 結果を表示する
-    document.getElementById('result').innerText = result;
-}
+        function copyResult() {
+            var resultElement = document.getElementById('result');
+            var range = document.createRange();
+            range.selectNode(resultElement);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            alert('結果がコピーされました！');
+        }
     </script>
 </body>
 </html>
