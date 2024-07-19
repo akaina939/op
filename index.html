@@ -8,6 +8,7 @@
     textarea {
         width: 100%;
         height: 200px; /* テキストエリアの高さを調整 */
+        resize: vertical; /* 高さを変更可能にする */
     }
     button {
         margin-top: 10px;
@@ -23,12 +24,18 @@
         max-width: 800px; /* 最大幅を設定 */
         margin-bottom: 20px; /* マージンを調整 */
     }
+    .result-area {
+        max-height: 400px; /* 結果エリアの最大高さを設定 */
+        overflow-y: auto; /* 縦スクロールを有効にする */
+    }
     pre {
         white-space: pre-wrap; /* 改行を保持 */
         word-wrap: break-word; /* 長い単語を折り返す */
         background-color: #f0f0f0;
         padding: 10px;
         border: 1px solid #ccc;
+        max-height: 400px; /* 結果表示の最大高さを設定 */
+        overflow-y: auto; /* 縦スクロールを有効にする */
     }
 </style>
 </head>
