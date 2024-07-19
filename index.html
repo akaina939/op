@@ -14,15 +14,14 @@
     }
     .text-container {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column; /* 垂直方向に配置 */
+        align-items: center;
         margin-top: 20px;
     }
-    .text-area {
-        flex: 1;
-        margin-right: 20px;
-    }
-    .result-area {
-        flex: 1;
+    .text-area, .result-area {
+        width: 90%; /* 幅を調整 */
+        max-width: 800px; /* 最大幅を設定 */
+        margin-bottom: 20px; /* マージンを調整 */
     }
     pre {
         white-space: pre-wrap; /* 改行を保持 */
@@ -60,7 +59,8 @@
                 if (symbols.includes(char) || /\s/.test(char)) {
                     result += char;
                 } else {
-                    result += '\\u{' + char.codePointAt(0).toString(16) + '}';
+                    var hex = char.codePointAt(0).toString(16).padStart(4, '0');
+                    result += '\\u' + hex;
                 }
             }
 
