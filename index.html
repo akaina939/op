@@ -64,8 +64,8 @@
             for (var i = 0; i < inputText.length; i++) {
                 var char = inputText.charAt(i);
 
-                // 指定された記号、空白、改行はそのまま
-                if (symbols.includes(char) || /\s/.test(char)) {
+                // 指定された記号、空白、改行、数字はそのまま
+                if (symbols.includes(char) || /\s/.test(char) || /\d/.test(char)) {
                     result += char;
                 } else {
                     var hex = char.codePointAt(0).toString(16).padStart(4, '0');
