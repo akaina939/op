@@ -23,11 +23,11 @@
         width: 90%; /* 幅を調整 */
         max-width: 800px; /* 最大幅を設定 */
         margin-bottom: 20px; /* マージンを調整 */
-    }
+    }/*
     .result-area {
-        max-height: 400px; /* 結果エリアの最大高さを設定 */
-        overflow-y: auto; /* 縦スクロールを有効にする */
-    }
+        max-height: 400px; /* 結果エリアの最大高さを設定 
+        overflow-y: auto;  /* 縦スクロールを有効にする 
+    }*/
     pre {
         white-space: pre-wrap; /* 改行を保持 */
         word-wrap: break-word; /* 長い単語を折り返す */
@@ -40,7 +40,8 @@
 </style>
 </head>
 <body>
-    <h1>Minecraftコード暗号化      サイト</h1>
+    <h1>Minecraft</h1>
+    <h2>コード暗号化</h2>
     <div class="text-container">
         <div class="text-area">
             <textarea id="input-text" placeholder="ここにMinecraftコード(json)を入力してください..." rows="10" cols="50"></textarea><br>
@@ -49,7 +50,7 @@
             <button onclick="convertToText()">復元🫠</button>
         </div>
          <h2>変換結果</h2>
-        <div class="result-area">
+        <div class="text-area">
             <pre id="result"></pre>
     </div>
             <button onclick="copyResult()">結果をコピー</button>
